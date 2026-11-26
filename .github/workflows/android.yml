@@ -23,11 +23,13 @@ jobs:
       - name: Prepare app files
         run: |
           # Remove spaces phones add to file names (e.g. "index .html" -> "index.html")
-          for f in *' '*; do [ -e "$f" ] && mv "$f" "${f// /}"; done
+          # If a fixed name already exists, the old spaced copy is removed instead
+          for f in *' '*; do [ -e "$f" ] || continue; t="${f// /}"; if [ -e "$t" ]; then rm "$f"; else mv "$f" "$t"; fi; done
           ls -la
           mkdir -p www assets
           cp index.html manifest.webmanifest sw.js icon-192.png icon-512.png icon-maskable.png www/
           cp logo.png assets/logo.png
+          if [ -f config.js ]; then cp config.js www/; fi
 
       - name: Install
         run: npm install --no-audit --no-fund
