@@ -1,0 +1,6 @@
+{
+  "appId": "app.source.gh",
+  "appName": "SOURCE",
+  "webDir": "www",
+  "android": { "backgroundColor": "#101A32" }
+}
