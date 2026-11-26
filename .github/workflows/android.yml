@@ -1,0 +1,49 @@
+name: Build SOURCE APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Prepare app files
+        run: |
+          mkdir -p www assets
+          cp index.html manifest.webmanifest sw.js icon-192.png icon-512.png icon-maskable.png www/
+          cp logo.png assets/logo.png
+
+      - name: Install
+        run: npm install --no-audit --no-fund
+
+      - name: Create Android project
+        run: npx cap add android
+
+      - name: App icon
+        continue-on-error: true
+        run: npx @capacitor/assets generate --android --iconBackgroundColor '#101A32' --iconBackgroundColorDark '#101A32' --splashBackgroundColor '#101A32' --splashBackgroundColorDark '#101A32'
+
+      - name: Build APK
+        run: |
+          npx cap sync android
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SOURCE-android
+          path: android/app/build/outputs/apk/debug/app-debug.apk
