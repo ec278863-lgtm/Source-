@@ -1,0 +1,14 @@
+{
+  "version": "2026-11-28",
+  "notices": [
+    {
+      "id": "welcome-updates",
+      "kind": "app",
+      "date": "2026-11-28",
+      "title": "SOURCE now updates itself",
+      "body": "Each time you open SOURCE with internet, it checks for new announcements, curriculum changes and education news. The last copy stays on your phone for offline use."
+    }
+  ],
+  "topics": [],
+  "app": { "latest": "1.5", "message": "", "url": "" }
+}
